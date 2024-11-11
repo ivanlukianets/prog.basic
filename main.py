@@ -1,23 +1,23 @@
-from random import randint, choice
+import pickle
+result_d ={}
+data = []
+with open("data.csv", "rt") as datafile:
+    next(datafile)
+    for row in datafile:
+        user_inf = [int(i) if (i.isdigit()) else i for i in row[:-1].split(",")]
+        if user_inf[3] not in result_d:
+            result_d[user_inf[3]] = {}
+        for item in result_d:
+            if item == user_inf[3]:
+                result_d[user_inf[3]][user_inf[5]] =[]
+        data.append(row)
 
-No = 1
-languages = ["Python", "C++", "C#", "Java"]
+for row in data:
+    user_inf = [int(i) if (i.isdigit()) else i for i in row[:-1].split(",")]
+    result_d[user_inf[3]][user_inf[5]].append(user_inf[0])
+    result_d[user_inf[3]][user_inf[5]].append(user_inf[1])
+    result_d[user_inf[3]][user_inf[5]].append(user_inf[2])
+    result_d[user_inf[3]][user_inf[5]].append(user_inf[4])
 
-with open("data.csv", "w") as datafile:
-    datafile.write("No, Student, Age, Grade, Sex, Prog. Language\n")
-    while No < 201:
-        string = f"{No}, student{No}, "
-        age = randint(13, 16)
-        if age == 13:
-            grade = randint(8, 9)
-        elif age == 14:
-            grade = randint(9, 10)
-        elif age == 15:
-            grade = randint(10, 11)
-        else:
-            grade = 11
-        sex = choice(["m", "fm"])
-        language = choice(languages)
-        string += f"{age}, {grade}, {sex}, {language}\n"
-        datafile.write(string)
-        No += 1
+with open('serialized_data.pkl', 'wb') as file:
+    pickle.dump(result_d, file)
